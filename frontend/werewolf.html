@@ -1,0 +1,142 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Werewolf</title>
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <!-- SockJS and STOMP Links -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js" integrity="sha512-5yJ548VSnLflcRxWNqVWYeQZnby8D8fJTmYRLyvs445j1XmzR8cnWi85lcHx3CUEeAX+GrK3TqTfzOO6LKDpdw==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous"></script>
+    <!-- Corresponding js and css files -->
+    <link rel="stylesheet" type="text/css" href="werewolf.css">
+    <script type="text/javascript" src="werewolf.js"></script>
+</head>
+<body>
+    <div id="content">
+
+        <div id="landing-container">
+            <h1 id="werewolf-title">Werewolf</h1>
+            <div id="landing-connect-container">
+                <div id="landing-username-container">
+                    <label for="landing-username-input" class="landing-label">Username:</label>
+                    <input type="text" class="landing-input" id="landing-username-input">
+                    <p class="landing-error-message" id="landing-username-invalid-error">Username must be 1-10 characters</p>
+                </div>
+                <div id="landing-join-game-container">
+                    <label for="landing-join-game-input" class="landing-label">Game Code:</label>
+                    <input type="text" class="landing-input" id="landing-join-game-input">
+                    <p class="landing-error-message" id="landing-code-invalid-error">Invalid game code</p>
+                    <p class="landing-error-message" id="landing-lobby-full-error">Lobby is full</p>
+                    <p class="landing-error-message" id="landing-game-does-not-exist-error">Game does not exist</p>
+                    <button id="landing-join-game-button">Join Game</button>
+                </div>
+                <button id="landing-create-game-button">Create new game</button>
+            </div>
+        </div>
+
+        <div id="create-game-container">
+            <div id="create-num-players-container">
+                <label for="create-num-input" id="create-num-label">Number of Players: </label>
+                <select name="create-num-input" id="create-num-input">
+                    <option value="3" id="create-num-3">3</option>
+                    <option value="4" id="create-num-4">4</option>
+                    <option value="5" id="create-num-5">5</option>
+                    <option value="6" id="create-num-6">6</option>
+                    <option value="7" id="create-num-7">7</option>
+                    <option value="8" id="create-num-8">8</option>
+                    <option value="9" id="create-num-9">9</option>
+                    <option value="10" id="create-num-10">10</option>
+                    <option value="11" id="create-num-11">11</option>
+                    <option value="12" id="create-num-12">12</option>
+                    <option value="13" id="create-num-13">13</option>
+                </select>
+            </div>
+            <div id="create-characters-container">
+                <img src="resources/characters/werewolf.png" alt="Werewolf character image" class="create-character-image WEREWOLF" id="werewolf-1">
+                <img src="resources/characters/werewolf.png" alt="Werewolf character image" class="create-character-image WEREWOLF" id="werewolf-2">
+                <img src="resources/characters/villager.png" alt="Villager character image" class="create-character-image VILLAGER" id="villager-1">
+                <img src="resources/characters/villager.png" alt="Villager character image" class="create-character-image VILLAGER" id="villager-2">
+                <img src="resources/characters/villager.png" alt="Villager character image" class="create-character-image VILLAGER" id="villager-3">
+                <img src="resources/characters/doppelganger.png" alt="Doppelganger character image" class="create-character-image DOPPELGANGER" id="doppelganger-1">
+                <img src="resources/characters/minion.png" alt="Minion character image" class="create-character-image MINION" id="minion-1">
+                <img src="resources/characters/mason.png" alt="Mason character image" class="create-character-image MASON" id="mason-1">
+                <img src="resources/characters/mason.png" alt="Mason character image" class="create-character-image MASON" id="mason-2">
+                <img src="resources/characters/seer.png" alt="Seer character image" class="create-character-image SEER" id="seer-1">
+                <img src="resources/characters/robber.png" alt="Robber character image" class="create-character-image ROBBER" id="robber-1">
+                <img src="resources/characters/troublemaker.png" alt="Troublemaker character image" class="create-character-image TROUBLEMAKER" id="troublemaker-1">
+                <img src="resources/characters/drunk.png" alt="Drunk character image" class="create-character-image DRUNK" id="drunk-1">
+                <img src="resources/characters/insomniac.png" alt="Insomniac character image" class="create-character-image INSOMNIAC" id="insomniac-1">
+                <img src="resources/characters/hunter.png" alt="Hunter character image" class="create-character-image HUNTER" id="hunter-1">
+                <img src="resources/characters/tanner.png" alt="Tanner character image" class="create-character-image TANNER" id="tanner-1">
+            </div>
+            <p id="create-characters-warning">Must select 6 characters</p>
+            <button id="create-game-button">Create Game</button>
+        </div>
+
+        <div id="pregame-lobby-container">
+            <button id="pregame-leave-button">Leave game</button>
+            <button id="pregame-back-to-lobby-button">Back to lobby</button>
+            <div id="pregame-lobby-stats">
+                <h1 id="pregame-code"></h1>
+                <h1 id="pregame-num-players">Waiting for players...</h1>
+            </div>
+            <div id="pregame-players-container">
+                
+            </div>
+            <div id="pregame-bottom-container">
+                <button class="pregame-host-button" id="pregame-host-start-button">Start</button>
+                <button class="pregame-host-button" id="pregame-host-settings-button">Settings</button>
+                <button class="pregame-nonhost-button" id="pregame-nonhost-settings-button">View Settings</button>
+            </div>
+            <div id="pregame-update-settings-container">
+                <div id="pregame-update-players-container">
+                    <label for="pregame-update-num-input" id="pregame-update-num-label">Number of Players: </label>
+                    <select name="pregame-update-num-input" id="pregame-update-num-input">
+                    </select>
+                </div>
+                <div id="pregame-update-characters-container">
+                    <!-- Generated by JS -->
+                </div>
+                <p id="pregame-update-characters-warning"></p>
+                <button id="pregame-update-game-button">Update Game</button>
+            </div>
+            <div id="pregame-view-settings-container">
+                <div id="pregame-view-characters-container">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <div id="game-container">
+            <div id="game-view-card-container">
+                <h1 id="game-view-card-owner">
+
+                </h1>
+                <div class="game-card-container">
+                    <div class="game-card">
+                        <img src="resources/question-mark.svg" alt="Card back image" class="game-card-face game-card-face-back">
+                        <img src="" alt="Character image" class="game-card-face game-card-face-front">
+                    </div>
+                </div>
+                <div id="game-view-card-below">
+                    <div id="game-view-card-below-ready">
+                        <h2 id="game-view-card-ready-tap-to-view">Tap card to view</h2>
+                        <button id="game-view-card-ready-button">Ready</button>
+                        <h2 id="game-view-card-ready-waiting">Waiting for others to ready up</h2>
+                    </div>
+                    <div id="game-view-card-below-back">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="night-container">
+            <div id="night-light"></div>
+        </div>
+    </div>
+</body>
+</html>
